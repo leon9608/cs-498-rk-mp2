@@ -1,0 +1,19 @@
+.movieList{
+  display: flex;
+  flex-direction: row;
+  flex-wrap:wrap;
+    .simpleImage{
+      padding:10px;
+      height:310px;
+      cursor:pointer;
+    }
+  }
+
+.horizontalContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .verticalM{
+    margin-left: 10px !important;
+  }
+}
