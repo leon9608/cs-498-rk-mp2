@@ -3,12 +3,14 @@ import { Menu } from 'semantic-ui-react'
 import axios from 'axios'
 import apiKey from "../config";
 import './gallery.scss'
+import DetailPage from './detail'
 class GalleryPage extends React.Component {
     constructor(props) {
         console.log(props)
         super(props)
         this.state = {
-            active:'all'
+            active:'all',
+            index: null,
         }
     }
 
@@ -79,14 +81,10 @@ class GalleryPage extends React.Component {
 
     }
     handleJumpDetail = (index)=>{
-        console.log(index);
-        let data = {};
-        data.list  = this.state.list;
-        data.index = index;
-        this.props.history.push({
-            pathname: '/detail',
-            state: data
+        this.setState({
+            index:index,
         })
+        this.detail.handleOpen();
     }
     render() {
         if(this.state.list) {
@@ -130,7 +128,7 @@ class GalleryPage extends React.Component {
                         onClick={this.handleAll}
                     />
                     {this.state.genres?this.state.genres.map((item, index)=>{
-                        console.log(item);
+                        // console.log(item);
                         return (
                             <Menu.Item
                                 name={item.name}
@@ -144,6 +142,7 @@ class GalleryPage extends React.Component {
 
                 {photoRender}
                 </div>
+                <DetailPage data={this.state} ref={ref => this.detail = ref}/>
             </div>
         )
     }

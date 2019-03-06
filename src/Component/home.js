@@ -4,6 +4,7 @@ import {Menu, Search, Segment, Grid, Dropdown, Radio} from 'semantic-ui-react'
 import apiKey from '../config'
 import debounce from 'lodash/debounce';
 import './home.scss'
+import DetailPage from './detail'
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -15,6 +16,8 @@ class HomePage extends React.Component {
             value: '',
             sortBy: 'title',
             list: [],
+            index: null,
+            detailOpen:false,
         }
         this.handleSearchChange = debounce(this.handleSearchChange, 500);
         this.handleItemClick = this.handleItemClick.bind(this);
@@ -22,7 +25,18 @@ class HomePage extends React.Component {
     }
 
     componentDidMount() {
-
+        let self = this;
+        axios
+            .get(`https://api.themoviedb.org/3/genre/movie/list?api_key=428af83ee908bf38ec9fed020289411f&language=en-US`)
+            .then(function (response) {
+                console.log(response)
+                self.setState({
+                    genres: response.data.genres
+                })
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
     }
 
     filter = (data, sortBy, order) => {
@@ -68,14 +82,10 @@ class HomePage extends React.Component {
         }
     }
     handleJumpDetail = (index)=>{
-        console.log(index);
-        let data = {};
-        data.list  = this.state.list;
-        data.index = index;
-        this.props.history.push({
-            pathname: '/detail',
-            state: data
+        this.setState({
+            index:index,
         })
+        this.detail.handleOpen();
     }
     handleItemClick = (e, data) => {
         console.log(data)
@@ -179,6 +189,7 @@ class HomePage extends React.Component {
                         {reseultRender}
                     </Grid>
                 </Segment>
+                <DetailPage data={this.state} ref={ref => this.detail = ref}/>
             </div>
 
         )
