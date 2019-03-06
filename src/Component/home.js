@@ -27,7 +27,7 @@ class HomePage extends React.Component {
     componentDidMount() {
         let self = this;
         axios
-            .get(`https://api.themoviedb.org/3/genre/movie/list?api_key=428af83ee908bf38ec9fed020289411f&language=en-US`)
+            .get(`https://api.themoviedb.org/3/genre/movie/list?api_key=428af83ee908bf38ec9fed020289411f`)
             .then(function (response) {
                 console.log(response)
                 self.setState({
@@ -84,9 +84,28 @@ class HomePage extends React.Component {
     handleJumpDetail = (index)=>{
         this.setState({
             index:index,
+            modalOpen:true,
         })
-        this.detail.handleOpen();
     }
+    moveLeft = () => {
+        let index = this.state.index - 1;
+        if (index < 0) {
+            index = this.state.list.length - 1;
+        }
+        this.setState({
+            index: index
+        })
+    }
+    moveRight = () => {
+        let index = this.state.index + 1;
+        if (index === this.state.list.length) {
+            index = 0;
+        }
+        this.setState({
+            index: index
+        })
+    }
+    handleClose = () => this.setState({modalOpen: false})
     handleItemClick = (e, data) => {
         console.log(data)
         if(data.name === 'gallery') {
@@ -113,7 +132,7 @@ class HomePage extends React.Component {
                     }
 
                     return (
-                        <div className='itemCard'>
+                        <div className='itemCard' key={'mykey' + index}>
                             <img src={imageSrc} className='image' />
                             <div className='content'>
                                 <div >{data.title} <br/>
@@ -134,7 +153,7 @@ class HomePage extends React.Component {
             <div>
                 <Menu size={'massive'}>
                     <Menu.Item
-                        name='home'
+                        name='Search'
                         active={true}
                         onClick={this.handleItemClick}
                     />
@@ -144,7 +163,8 @@ class HomePage extends React.Component {
                         onClick={this.handleItemClick}
                     />
                 </Menu>
-                <Segment basic textAlign={'center'}>
+                <div className={'paralax'}/>
+                <Segment basic textAlign={'center'} >
 
                     <h1> Search the movie name </h1>
                     <Grid centered>
@@ -189,7 +209,7 @@ class HomePage extends React.Component {
                         {reseultRender}
                     </Grid>
                 </Segment>
-                <DetailPage data={this.state} ref={ref => this.detail = ref}/>
+                <DetailPage data={this.state} handleClose={this.handleClose} moveLeft={this.moveLeft} moveRight={this.moveRight}/>
             </div>
 
         )

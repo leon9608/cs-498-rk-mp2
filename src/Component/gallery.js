@@ -6,21 +6,21 @@ import './gallery.scss'
 import DetailPage from './detail'
 class GalleryPage extends React.Component {
     constructor(props) {
-        console.log(props)
+        // console.log(props)
         super(props)
         this.state = {
             active:'all',
             index: null,
+            modalOpen: false,
         }
     }
 
     componentDidMount() {
         let self = this;
         axios
-            .get(`https://api.themoviedb.org/3/movie/popular?api_key=428af83ee908bf38ec9fed020289411f&language=en-US&page=1
-`)
+            .get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&page=1`)
             .then(function (response) {
-                console.log(response)
+                // console.log(response)
                 self.setState({
                     list: response.data.results
                 })
@@ -29,7 +29,7 @@ class GalleryPage extends React.Component {
                 console.log(error)
             })
         axios
-            .get(`https://api.themoviedb.org/3/genre/movie/list?api_key=428af83ee908bf38ec9fed020289411f&language=en-US`)
+            .get(`https://api.themoviedb.org/3/genre/movie/list?api_key=428af83ee908bf38ec9fed020289411f`)
             .then(function (response) {
                 console.log(response)
                 self.setState({
@@ -41,7 +41,7 @@ class GalleryPage extends React.Component {
             })
     }
     handleItemClick = (e, data) => {
-        if(data.name === 'home') {
+        if(data.name === 'Search') {
             this.props.history.goBack()
         }
     }
@@ -49,7 +49,7 @@ class GalleryPage extends React.Component {
         if(this.state.active !== 'all') {
             let self = this;
             axios
-                .get(`https://api.themoviedb.org/3/movie/popular?api_key=428af83ee908bf38ec9fed020289411f&language=en-US&page=1`)
+                .get(`https://api.themoviedb.org/3/movie/popular?api_key=428af83ee908bf38ec9fed020289411f&page=1`)
                 .then(function (response) {
                     console.log(response)
                     self.setState({
@@ -83,12 +83,31 @@ class GalleryPage extends React.Component {
     handleJumpDetail = (index)=>{
         this.setState({
             index:index,
+            modalOpen:true,
         })
-        this.detail.handleOpen();
     }
+    moveLeft = () => {
+        let index = this.state.index - 1;
+        if (index < 0) {
+            index = this.state.list.length - 1;
+        }
+        this.setState({
+            index: index
+        })
+    }
+    moveRight = () => {
+        let index = this.state.index + 1;
+        if (index === this.state.list.length) {
+            index = 0;
+        }
+        this.setState({
+            index: index
+        })
+    }
+    handleClose = () => this.setState({modalOpen: false})
+
     render() {
         if(this.state.list) {
-            console.log(this.state.list)
             var photoRender =   (<div className='movieList'> {this.state.list.map((data,index)=>{
                 let imageSrc;
                 if(!data.poster_path){
@@ -109,7 +128,7 @@ class GalleryPage extends React.Component {
             <div>
                 <Menu size={'massive'}>
                     <Menu.Item
-                        name='home'
+                        name="Search"
                         active={false}
                         onClick={this.handleItemClick}
                     />
@@ -119,10 +138,11 @@ class GalleryPage extends React.Component {
                         onClick={this.handleItemClick}
                     />
                 </Menu>
+                <div className={'paralax2'}/>
                 <div className={'horizontalContainer'}>
                 <Menu text vertical className='verticalM'>
-                    <Menu.Item header>Explore popular by</Menu.Item>
-                    <Menu.Item
+                    <Menu.Item header className={'itemColor'}>Explore popular by</Menu.Item>
+                    <Menu.Item className={'itemColor'}
                         name='all'
                         active={activeItem === 'all'}
                         onClick={this.handleAll}
@@ -130,7 +150,7 @@ class GalleryPage extends React.Component {
                     {this.state.genres?this.state.genres.map((item, index)=>{
                         // console.log(item);
                         return (
-                            <Menu.Item
+                            <Menu.Item className={'itemColor'}
                                 name={item.name}
                                 active={activeItem === item.name}
                                 onClick={this.handleGenre.bind(this,index)}
@@ -142,7 +162,7 @@ class GalleryPage extends React.Component {
 
                 {photoRender}
                 </div>
-                <DetailPage data={this.state} ref={ref => this.detail = ref}/>
+                <DetailPage data={this.state} handleClose={this.handleClose} moveLeft={this.moveLeft} moveRight={this.moveRight}/>
             </div>
         )
     }
