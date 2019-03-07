@@ -17,9 +17,9 @@ class HomePage extends React.Component {
             sortBy: 'title',
             list: [],
             index: null,
-            detailOpen:false,
+            detailOpen: false,
         }
-        this.handleSearchChange = debounce(this.handleSearchChange, 500);
+        this.handleSearchChange = debounce(this.handleSearchChange, 300);
         this.handleItemClick = this.handleItemClick.bind(this);
         this.filter = this.filter.bind(this);
     }
@@ -43,16 +43,16 @@ class HomePage extends React.Component {
         return data.sort((a, b) => {
             if (sortBy === 'title') {
 
-                return order === 'a'? (a[sortBy].toLowerCase()).localeCompare(b[sortBy].toLowerCase()) : (b[sortBy].toLowerCase()).localeCompare(a[sortBy].toLowerCase());
+                return order === 'a' ? (a[sortBy].toLowerCase()).localeCompare(b[sortBy].toLowerCase()) : (b[sortBy].toLowerCase()).localeCompare(a[sortBy].toLowerCase());
             } else {
-                return order === 'a'? a[sortBy] - b[sortBy]:b[sortBy] - a[sortBy];
+                return order === 'a' ? a[sortBy] - b[sortBy] : b[sortBy] - a[sortBy];
             }
         });
     }
     handleOrderChange = (e, data) => {
         this.setState({
             order: data.value,
-            list:this.filter(this.state.list, this.state.sortBy, data.value)
+            list: this.filter(this.state.list, this.state.sortBy, data.value)
         })
     }
     handleSortChange = (e, data) => {
@@ -62,7 +62,7 @@ class HomePage extends React.Component {
             list: this.filter(this.state.list, data.value, this.state.order),
         })
     }
-    handleSearchChange =(e, {value}) => {
+    handleSearchChange = (e, {value}) => {
         if (value !== '') {
             this.setState({isLoading: true, value})
             let self = this;
@@ -81,10 +81,10 @@ class HomePage extends React.Component {
                 })
         }
     }
-    handleJumpDetail = (index)=>{
+    handleJumpDetail = (index) => {
         this.setState({
-            index:index,
-            modalOpen:true,
+            index: index,
+            modalOpen: true,
         })
     }
     moveLeft = () => {
@@ -108,9 +108,9 @@ class HomePage extends React.Component {
     handleClose = () => this.setState({modalOpen: false})
     handleItemClick = (e, data) => {
         console.log(data)
-        if(data.name === 'gallery') {
+        if (data.name === 'gallery') {
             this.props.history.push({
-                pathname: '/gallery',
+                pathname: '/cs-498-rk-mp2/gallery',
             })
         }
     }
@@ -123,31 +123,31 @@ class HomePage extends React.Component {
             reseultRender = <h4>Nothing is shown</h4>;
         } else {
 
-            reseultRender =   (<div className='listContainer'> {list.map((data,index)=>{
-                    let imageSrc;
-                    if(!data.poster_path){
-                        imageSrc = emptyImage;
-                    }else{
-                        imageSrc  = 'https://image.tmdb.org/t/p/w400'+ data.poster_path;
-                    }
+            reseultRender = (<div className='listContainer'> {list.map((data, index) => {
+                let imageSrc;
+                if (!data.poster_path) {
+                    imageSrc = emptyImage;
+                } else {
+                    imageSrc = 'https://image.tmdb.org/t/p/w400' + data.poster_path;
+                }
 
-                    return (
-                        <div className='itemCard' key={'mykey' + index}>
-                            <img src={imageSrc} className='image' />
-                            <div className='content'>
-                                <div >{data.title} <br/>
-                                    Popularity: {data.popularity} <br/>
-                                    vote Average: {data.vote_average} <br/>
-                                    vote Count: {data.vote_count} <br/>
-                                    <a className='link' onClick={this.handleJumpDetail.bind(this,index)}>View Detail</a>
-                                </div>
-
+                return (
+                    <div className='itemCard' key={'mykey' + index}>
+                        <img src={imageSrc} className='image'/>
+                        <div className='content'>
+                            <div>{data.title} <br/>
+                                Popularity: {data.popularity} <br/>
+                                vote Average: {data.vote_average} <br/>
+                                vote Count: {data.vote_count} <br/>
+                                <a className='link' onClick={this.handleJumpDetail.bind(this, index)}>View Detail</a>
                             </div>
+
                         </div>
-                    )
-                })}
+                    </div>
+                )
+            })}
             </div>)
-            }
+        }
 
         return (
             <div>
@@ -164,7 +164,7 @@ class HomePage extends React.Component {
                     />
                 </Menu>
                 <div className={'paralax'}/>
-                <Segment basic textAlign={'center'} >
+                <Segment basic textAlign={'center'}>
 
                     <h1> Search the movie name </h1>
                     <Grid centered>
@@ -209,7 +209,8 @@ class HomePage extends React.Component {
                         {reseultRender}
                     </Grid>
                 </Segment>
-                <DetailPage data={this.state} handleClose={this.handleClose} moveLeft={this.moveLeft} moveRight={this.moveRight}/>
+                <DetailPage data={this.state} handleClose={this.handleClose} moveLeft={this.moveLeft}
+                            moveRight={this.moveRight}/>
             </div>
 
         )

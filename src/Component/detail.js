@@ -9,10 +9,10 @@ class DetailPage extends React.Component {
         if (this.props.data.list !== null && this.props.data.index !== null) {
             const movie = this.props.data.list[this.props.data.index];
             let imgsrc;
-            if(!movie.poster_path){
+            if (!movie.poster_path) {
                 imgsrc = emptyImage;
-            }else{
-                imgsrc  = 'https://image.tmdb.org/t/p/w300' + movie.poster_path;
+            } else {
+                imgsrc = 'https://image.tmdb.org/t/p/w300' + movie.poster_path;
             }
             return (
                 <Modal dimmer={'blurring'} open={this.props.data.modalOpen} onClose={this.props.handleClose}>
@@ -50,23 +50,24 @@ class DetailPage extends React.Component {
 
     }
 }
+
 const emptyImage = require('../asset/Unknown.jpg')
 
 
-DetailPage.propTypes= {
+DetailPage.propTypes = {
     handleClose: PropTypes.func.isRequired,
     data: PropTypes.shape({
         title: PropTypes.string,
         original_title: PropTypes.string,
         id: PropTypes.number,
         genres: PropTypes.arrayOf(PropTypes.shape({
-                id: PropTypes.number,
-                name: PropTypes.string,
+            id: PropTypes.number,
+            name: PropTypes.string,
         })),
         vote_average: PropTypes.number,
         vote_count: PropTypes.number,
         release_date: PropTypes.string,
-        overview:PropTypes.string,
+        overview: PropTypes.string,
     }),
     moveLeft: PropTypes.func.isRequired,
     moveRight: PropTypes.func.isRequired,

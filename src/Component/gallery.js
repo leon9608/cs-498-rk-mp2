@@ -1,15 +1,16 @@
 import React from 'react'
-import { Menu } from 'semantic-ui-react'
+import {Menu} from 'semantic-ui-react'
 import axios from 'axios'
 import apiKey from "../config";
 import './gallery.scss'
 import DetailPage from './detail'
+
 class GalleryPage extends React.Component {
     constructor(props) {
         // console.log(props)
         super(props)
         this.state = {
-            active:'all',
+            active: 'all',
             index: null,
             modalOpen: false,
         }
@@ -40,13 +41,14 @@ class GalleryPage extends React.Component {
                 console.log(error)
             })
     }
+
     handleItemClick = (e, data) => {
-        if(data.name === 'Search') {
+        if (data.name === 'Search') {
             this.props.history.goBack()
         }
     }
-    handleAll = ()=>{
-        if(this.state.active !== 'all') {
+    handleAll = () => {
+        if (this.state.active !== 'all') {
             let self = this;
             axios
                 .get(`https://api.themoviedb.org/3/movie/popular?api_key=428af83ee908bf38ec9fed020289411f&page=1`)
@@ -62,8 +64,8 @@ class GalleryPage extends React.Component {
                 })
         }
     }
-    handleGenre = (index) =>{
-        if(this.state.active !== this.state.genres[index].name) {
+    handleGenre = (index) => {
+        if (this.state.active !== this.state.genres[index].name) {
             let self = this;
             axios
                 .get(`https://api.themoviedb.org/3/discover/movie?api_key=428af83ee908bf38ec9fed020289411f&sort_by=popularity.desc&page=1&with_genres=${this.state.genres[index].id}`)
@@ -80,10 +82,10 @@ class GalleryPage extends React.Component {
         }
 
     }
-    handleJumpDetail = (index)=>{
+    handleJumpDetail = (index) => {
         this.setState({
-            index:index,
-            modalOpen:true,
+            index: index,
+            modalOpen: true,
         })
     }
     moveLeft = () => {
@@ -107,17 +109,17 @@ class GalleryPage extends React.Component {
     handleClose = () => this.setState({modalOpen: false})
 
     render() {
-        if(this.state.list) {
-            var photoRender =   (<div className='movieList'> {this.state.list.map((data,index)=>{
+        if (this.state.list) {
+            var photoRender = (<div className='movieList'> {this.state.list.map((data, index) => {
                 let imageSrc;
-                if(!data.poster_path){
+                if (!data.poster_path) {
                     imageSrc = emptyImage;
-                }else{
-                    imageSrc  = 'https://image.tmdb.org/t/p/w400'+ data.poster_path;
+                } else {
+                    imageSrc = 'https://image.tmdb.org/t/p/w400' + data.poster_path;
                 }
 
                 return (
-                    <img src={imageSrc} className='simpleImage' onClick={this.handleJumpDetail.bind(this,index)}/>
+                    <img src={imageSrc} className='simpleImage' onClick={this.handleJumpDetail.bind(this, index)}/>
                 )
             })}
             </div>)
@@ -140,29 +142,30 @@ class GalleryPage extends React.Component {
                 </Menu>
                 <div className={'paralax2'}/>
                 <div className={'horizontalContainer'}>
-                <Menu text vertical className='verticalM'>
-                    <Menu.Item header className={'itemColor'}>Explore popular by</Menu.Item>
-                    <Menu.Item className={'itemColor'}
-                        name='all'
-                        active={activeItem === 'all'}
-                        onClick={this.handleAll}
-                    />
-                    {this.state.genres?this.state.genres.map((item, index)=>{
-                        // console.log(item);
-                        return (
-                            <Menu.Item className={'itemColor'}
-                                name={item.name}
-                                active={activeItem === item.name}
-                                onClick={this.handleGenre.bind(this,index)}
-                            />
-                        );
+                    <Menu text vertical className='verticalM'>
+                        <Menu.Item header className={'itemColor'}>Explore popular by</Menu.Item>
+                        <Menu.Item className={'itemColor'}
+                                   name='all'
+                                   active={activeItem === 'all'}
+                                   onClick={this.handleAll}
+                        />
+                        {this.state.genres ? this.state.genres.map((item, index) => {
+                            // console.log(item);
+                            return (
+                                <Menu.Item className={'itemColor'}
+                                           name={item.name}
+                                           active={activeItem === item.name}
+                                           onClick={this.handleGenre.bind(this, index)}
+                                />
+                            );
 
-                    }) : null}
-                </Menu>
+                        }) : null}
+                    </Menu>
 
-                {photoRender}
+                    {photoRender}
                 </div>
-                <DetailPage data={this.state} handleClose={this.handleClose} moveLeft={this.moveLeft} moveRight={this.moveRight}/>
+                <DetailPage data={this.state} handleClose={this.handleClose} moveLeft={this.moveLeft}
+                            moveRight={this.moveRight}/>
             </div>
         )
     }

@@ -2,7 +2,7 @@
   "name": "mp2",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://leon9608.github.io/cs-498-rk-mp2",
+  "homepage": "https://leon9608.github.io/cs-498-rk-mp2/",
   "dependencies": {
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
