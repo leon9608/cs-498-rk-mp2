@@ -7,8 +7,8 @@ import GalleryPage from './Component/gallery'
 const App = () => (
     <Router>
         <Switch>
-        <Route path="/" exact component={HomePage} />
-        <Route path="/gallery" exact component={GalleryPage} />
+        <Route path="https://leon9608.github.io/cs-498-rk-mp2/" exact component={HomePage} />
+        <Route path="https://leon9608.github.io/cs-498-rk-mp2/gallery" exact component={GalleryPage} />
         </Switch>
     </Router>
 )
