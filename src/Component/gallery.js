@@ -13,6 +13,7 @@ class GalleryPage extends React.Component {
             active: 'all',
             index: null,
             modalOpen: false,
+            geneList:[],
         }
     }
 
@@ -56,7 +57,8 @@ class GalleryPage extends React.Component {
                     console.log(response)
                     self.setState({
                         active: 'all',
-                        list: response.data.results
+                        list: response.data.results,
+                        geneList:[],
                     })
                 })
                 .catch(function (error) {
@@ -65,21 +67,31 @@ class GalleryPage extends React.Component {
         }
     }
     handleGenre = (index) => {
-        if (this.state.active !== this.state.genres[index].name) {
+        // if (this.state.active !== this.state.genres[index].name) {
             let self = this;
+            let geneString = '';
+            let geneList = self.state.geneList;
+            if(!geneList.includes(index)){
+                geneList.push(index);
+            }else{
+                geneList.splice( geneList.indexOf(index), 1 );
+            }
+
+            geneList.forEach((i) => geneString += self.state.genres[i].id + ',')
             axios
-                .get(`https://api.themoviedb.org/3/discover/movie?api_key=428af83ee908bf38ec9fed020289411f&sort_by=popularity.desc&page=1&with_genres=${this.state.genres[index].id}`)
+                .get(`https://api.themoviedb.org/3/discover/movie?api_key=428af83ee908bf38ec9fed020289411f&sort_by=popularity.desc&page=1&with_genres=${geneString}`)
                 .then(function (response) {
                     console.log(response)
                     self.setState({
                         active: self.state.genres[index].name,
-                        list: response.data.results
+                        list: response.data.results,
+                        geneList:geneList,
                     })
                 })
                 .catch(function (error) {
                     console.log(error)
                 })
-        }
+        // }
 
     }
     handleJumpDetail = (index) => {
@@ -126,6 +138,7 @@ class GalleryPage extends React.Component {
         }
 
         let activeItem = this.state.active;
+        let activeEach = this.state.geneList;
         return (
             <div>
                 <Menu size={'massive'}>
@@ -154,7 +167,7 @@ class GalleryPage extends React.Component {
                             return (
                                 <Menu.Item className={'itemColor'}
                                            name={item.name}
-                                           active={activeItem === item.name}
+                                           active={activeEach.includes(index)}
                                            onClick={this.handleGenre.bind(this, index)}
                                 />
                             );
