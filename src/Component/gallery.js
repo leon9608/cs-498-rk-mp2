@@ -15,6 +15,7 @@ class GalleryPage extends React.Component {
             modalOpen: false,
             geneList:[],
         }
+        this.handleAll = this.handleAll.bind(this)
     }
 
     componentDidMount() {
@@ -49,7 +50,7 @@ class GalleryPage extends React.Component {
         }
     }
     handleAll = () => {
-        if (this.state.active !== 'all') {
+
             let self = this;
             axios
                 .get(`https://api.themoviedb.org/3/movie/popular?api_key=428af83ee908bf38ec9fed020289411f&page=1`)
@@ -64,7 +65,7 @@ class GalleryPage extends React.Component {
                 .catch(function (error) {
                     console.log(error)
                 })
-        }
+
     }
     handleGenre = (index) => {
         // if (this.state.active !== this.state.genres[index].name) {
@@ -76,6 +77,7 @@ class GalleryPage extends React.Component {
             }else{
                 geneList.splice( geneList.indexOf(index), 1 );
             }
+            console.log(geneList)
             if(geneList.length === 0){
                 this.handleAll();
                 return;
