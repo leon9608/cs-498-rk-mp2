@@ -76,7 +76,10 @@ class GalleryPage extends React.Component {
             }else{
                 geneList.splice( geneList.indexOf(index), 1 );
             }
-
+            if(geneList.length === 0){
+                this.handleAll();
+                return;
+            }
             geneList.forEach((i) => geneString += self.state.genres[i].id + ',')
             axios
                 .get(`https://api.themoviedb.org/3/discover/movie?api_key=428af83ee908bf38ec9fed020289411f&sort_by=popularity.desc&page=1&with_genres=${geneString}`)
